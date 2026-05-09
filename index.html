@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Policía Nacional del Ecuador – Evaluación de Especialistas</title>
+  <title>MULTIESTUDIOS | Tutor Inteligente para Ingenierías - Policía Nacional</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f6f9; color: #333; }
     
+    /* Pantalla de acceso */
     .access-screen {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       min-height: 100vh; background: linear-gradient(135deg, #004d40, #00695c);
+      position: relative;
     }
     .access-card {
-      background: white; padding: 3rem 2rem; border-radius: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      text-align: center; width: 90%; max-width: 450px;
+      background: white; padding: 2rem 2rem 1.5rem; border-radius: 1.2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      text-align: center; width: 90%; max-width: 480px;
     }
-    .access-card h1 { color: #004d40; margin-bottom: 0.5rem; }
-    .access-card p { color: #555; margin-bottom: 2rem; }
+    .access-card h1 { color: #004d40; font-size: 2.3rem; margin-bottom: 0.25rem; letter-spacing: 1px; }
+    .access-card .sub { color: #00695c; font-weight: 600; font-size: 1rem; margin-bottom: 0.4rem; }
+    .access-card .lema { color: #555; font-style: italic; margin-bottom: 1.8rem; font-size: 0.85rem; border-top: 1px solid #ddd; padding-top: 0.75rem; }
     .access-card select, .access-card input {
       width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 0.5rem;
       font-size: 1rem;
@@ -28,8 +31,11 @@
     }
     .btn:hover { background: #00695c; }
     .btn.secondary { background: #607d8b; }
+    .btn.secondary:hover { background: #455a64; }
     .error-msg { color: #c62828; margin-top: 0.5rem; font-weight: bold; }
+    .footer-note { margin-top: 1.8rem; font-size: 0.7rem; color: #aaa; text-align: center; border-top: 1px solid #eee; padding-top: 1rem; }
 
+    /* Panel principal (sin cambios estructurales) */
     .main-panel { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
     .header h2 { color: #004d40; }
@@ -39,36 +45,71 @@
     .temario-list { max-height: 400px; overflow-y: auto; padding: 0.5rem; background: #fafafa; border-radius: 0.4rem; }
     .temario-item { padding: 0.7rem; border-bottom: 1px solid #e0e0e0; cursor: pointer; }
     .temario-item:hover { background: #e0f2f1; }
-    .case-box, .answer-box, .model-answer-box, .feedback-box { margin-top: 1rem; }
-    textarea { width: 100%; height: 200px; padding: 0.8rem; border: 1px solid #ccc; border-radius: 0.5rem; resize: vertical; font-size: 0.95rem; }
-    .loading { text-align: center; color: #004d40; margin: 1rem 0; }
+    textarea { width: 100%; height: 200px; padding: 0.8rem; border: 1px solid #ccc; border-radius: 0.5rem; resize: vertical; }
     .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
     .btn-group .btn { width: auto; }
     pre { white-space: pre-wrap; background: #f5f5f5; padding: 1rem; border-radius: 0.5rem; }
+    .loading { text-align: center; color: #004d40; margin: 1rem 0; }
+
+    /* Modal para caso de muestra */
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+      background: white; max-width: 650px; width: 90%; border-radius: 1rem; padding: 1.5rem;
+      max-height: 80vh; overflow-y: auto; position: relative;
+    }
+    .modal-content h3 { color: #004d40; margin-bottom: 1rem; }
+    .modal-content .close-modal {
+      position: absolute; top: 10px; right: 15px; font-size: 1.8rem; cursor: pointer; color: #888;
+    }
+    .modal-content .close-modal:hover { color: #000; }
+
+    /* WhatsApp flotante */
+    .whatsapp-float {
+      position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white;
+      width: 60px; height: 60px; border-radius: 50%; text-align: center; font-size: 30px;
+      line-height: 60px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 100;
+      transition: transform 0.2s; text-decoration: none;
+    }
+    .whatsapp-float:hover { transform: scale(1.05); background-color: #128C7E; }
   </style>
 </head>
 <body>
 
+<!-- MODAL PARA CASO DE MUESTRA -->
+<div id="sampleModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeSampleModal()">&times;</span>
+    <h3>📘 Caso práctico de muestra (Ingeniería Civil)</h3>
+    <div id="sampleCaseContent"></div>
+  </div>
+</div>
+
 <!-- PANTALLA DE ACCESO -->
 <div id="accessScreen" class="access-screen">
   <div class="access-card">
-    <h1>Policía Nacional del Ecuador</h1>
-    <p>Evaluación para Aspirantes a Especialistas</p>
+    <h1>MULTIESTUDIOS</h1>
+    <div class="sub">Centro de Educación Continua</div>
+    <div class="lema">Tutor Inteligente para Postulantes a Especialistas de la Policía Nacional<br>en el Área de Ingenierías</div>
+    
     <input type="text" id="cedulaInput" placeholder="Número de cédula" />
     <select id="carreraSelect">
-      <option value="">Seleccione carrera</option>
+      <option value="">Seleccione su especialidad</option>
       <option>Ingeniería Civil</option>
       <option>Ingeniería Industrial</option>
       <option>Ingeniería Mecánica</option>
       <option>Ingeniería Automotriz</option>
-      <option>Medicina</option>
     </select>
     <button class="btn" onclick="login()">Ingresar</button>
+    <button class="btn secondary" onclick="showSampleCase()" style="margin-top: 0.8rem;">Ver caso práctico de muestra</button>
     <div id="loginError" class="error-msg"></div>
+    <div class="footer-note">Powered by Physics – 0995324419 | 2026</div>
   </div>
 </div>
 
-<!-- PANEL PRINCIPAL -->
+<!-- PANEL PRINCIPAL (idéntico funcionamiento, solo cambian los datos) -->
 <div id="mainPanel" class="main-panel">
   <div class="header">
     <h2>Panel del Aspirante – <span id="careerDisplay"></span></h2>
@@ -114,22 +155,26 @@
   </div>
 </div>
 
+<!-- BOTÓN WHATSAPP FLOTANTE -->
+<a href="https://wa.me/593996328491" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+  💬
+</a>
+
 <script>
-  // ==================== CONFIGURACIÓN ====================
-  const API_KEY = 'sk-5be59b1373ae48dfb7a39e9b2e5b5a46'; // ¡REEMPLAZAR con tu API key real!
+  // ==================== CONFIGURACIÓN API (sin cambios) ====================
+  const API_KEY = 'sk-5be59b1373ae48dfb7a39e9b2e5b5a46';
   const API_URL = 'https://api.deepseek.com/v1/chat/completions';
   const MODEL = 'deepseek-v4-pro';
 
-  // Lista de cédulas y carreras autorizadas
+  // ==================== USUARIOS AUTORIZADOS (solo ingenierías) ====================
   const ALLOWED_USERS = [
     { cedula: '1711111111', carrera: 'Ingeniería Civil' },
     { cedula: '1712222222', carrera: 'Ingeniería Industrial' },
     { cedula: '1710280942', carrera: 'Ingeniería Mecánica' },
-    { cedula: '1713333333', carrera: 'Ingeniería Automotriz' },
-    { cedula: '1714444444', carrera: 'Medicina' }
+    { cedula: '1713333333', carrera: 'Ingeniería Automotriz' }
   ];
 
-  // ==================== TEMARIOS COMPLETOS ====================
+  // ==================== TEMARIOS COMPLETOS (se mantienen los originales para cada ingeniería) ====================
   const TEMARIOS = {
     'Ingeniería Civil': [
       "1. Mecánica de suelos y cimentaciones en obras policiales (cuarteles, muros perimetrales).",
@@ -338,62 +383,10 @@
       "48. Telemetría y monitoreo remoto de flotas (GPS/CAN).",
       "49. Capacitación técnica del personal de talleres móviles.",
       "50. Evaluación de ofertas técnicas en licitaciones de vehículos."
-    ],
-    'Medicina': [
-      "1. Medicina forense: valoración de lesiones en víctimas y agresores conforme al COIP.",
-      "2. Tanatología policial: levantamiento de cadáver, signos posmortem y cronotanatodiagnóstico.",
-      "3. Valoración del estado de salud del detenido: deberes constitucionales y protocolos de ingreso.",
-      "4. Asfixias mecánicas en contexto de violencia policial o suicidio bajo custodia.",
-      "5. Heridas por proyectil de arma de fuego: interpretación médico‑legal y cadena de custodia.",
-      "6. Lesiones por explosivos en atentados contra instalaciones policiales.",
-      "7. Diagnóstico diferencial de lesiones compatibles con tortura o maltrato.",
-      "8. Toxicología de sustancias incautadas: cocaína, marihuana, precursores y nuevas drogas.",
-      "9. Embriaguez y estupefacientes: peritaje clínico para partes de tránsito y delitos.",
-      "10. Evaluación de la capacidad de conducción bajo sedantes o patologías crónicas en conductores policiales.",
-      "11. Examen físico forense de agresión sexual: protocolo ecuatoriano (Ministerio de Salud Pública).",
-      "12. Violencia de género: abordaje médico‑legal en unidades de policía comunitaria.",
-      "13. Psiquiatría forense: evaluación de la imputabilidad y trastornos mentales en victimarios.",
-      "14. Contención mecánica y farmacológica de personas agitadas: riesgos y protocolos.",
-      "15. Síndrome de abstinencia en detenidos drogodependientes: manejo urgente.",
-      "16. Enfermedades infectocontagiosas en cárceles y centros de detención: tuberculosis, VIH, hepatitis.",
-      "17. Bioseguridad y manejo de fluidos corporales en escenas del crimen.",
-      "18. Primer respondiente médico en incidentes con materiales peligrosos (HAZMAT).",
-      "19. Atención prehospitalaria en tiroteos activos: protocolo TCCC (Tactical Combat Casualty Care).",
-      "20. Extracción táctica de heridos en zonas hostiles (CASEVAC/MEDEVAC).",
-      "21. Soporte vital básico y avanzado en patrulleros medicalizados.",
-      "22. Valoración primaria y secundaria en siniestros viales múltiples.",
-      "23. Triaje en incidentes de múltiples víctimas (START y SALTO).",
-      "24. Manejo del dolor agudo en el entorno prehospitalario con recursos limitados.",
-      "25. Quemaduras por explosivos, eléctricas y químicas en operativos especiales.",
-      "26. Traumatismos por onda expansiva (blast injuries): fisiopatología y tratamiento inicial.",
-      "27. Intoxicación por monóxido de carbono en recintos cerrados (garitas, vehículos blindados).",
-      "28. Patologías relacionadas con el estrés calórico en unidades de tránsito y patrullaje.",
-      "29. Exposición crónica al plomo en instructores de tiro y personal de armería.",
-      "30. Ergonomía y patología musculoesquelética del personal con chaleco balístico.",
-      "31. Hipoacusia inducida por ruido en prácticas de polígono.",
-      "32. Evaluación de la aptitud médica para el uso de armas de fuego.",
-      "33. Reconocimientos médicos periódicos al personal policial: normativa nacional e indicadores.",
-      "34. Valoración de la discapacidad laboral sobrevenida por acto de servicio.",
-      "35. Protocolos de vacunación y quimioprofilaxis para misiones en zonas selváticas.",
-      "36. Medicina aeroespacial: requisitos para tripulaciones de helicópteros policiales.",
-      "37. Buceo de rescate: afecciones por descompresión y barotrauma.",
-      "38. Nutrición y suplementación en unidades tácticas de despliegue prolongado.",
-      "39. Trastornos del sueño y turnicidad: impacto cognitivo en tomadores de decisión.",
-      "40. Detección precoz de síndrome de burnout y estrés postraumático en efectivos.",
-      "41. Entrevista clínica al personal luego de incidentes críticos (defusing y debriefing).",
-      "42. Medicina de desastres: organización de hospitales de campaña en catástrofes naturales.",
-      "43. Gestión de brotes epidémicos en acuartelamientos y centros de formación.",
-      "44. Auditoría médica de los servicios de salud policial con criterios de calidad (ISO 9001).",
-      "45. Administración hospitalaria en el Hospital de la Policía Nacional del Ecuador.",
-      "46. Contratación pública (LOSNCP) aplicada a la adquisición de insumos y equipos médicos.",
-      "47. Aspectos legales de la historia clínica como documento público y prueba judicial.",
-      "48. Responsabilidad penal por mala praxis médica en el ámbito policial.",
-      "49. Principios de bioética en la atención a detenidos y población vulnerable.",
-      "50. Planeación estratégica en sanidad policial: optimización de recursos y eficiencia del gasto público."
     ]
   };
 
-  // ==================== CASOS PRECARGADOS ====================
+  // ==================== CASOS PRECARGADOS (sin Medicina) ====================
   const CASOS_BANK = {
     'Ingeniería Civil': {
       enunciado: "Usted es ingeniero civil especialista de la Dirección Nacional de Logística. Se debe construir un cuartel tipo en la provincia de Morona Santiago (zona de alta sismicidad y fuertes lluvias). El terreno presenta un suelo limo-arcilloso con capacidad portante de 0.8 kg/cm². El proyecto incluye un polvorín subterráneo y una torre de vigilancia de 15 m. Se cuenta con un presupuesto ajustado y se deben respetar las normas NEC y LOSNCP. Se reciben dos ofertas: una con cimentación superficial mejorada y otra con pilotes.",
@@ -430,16 +423,18 @@
         "3. Si la SUV turbo requiere gasolina de 98 octanos y solo hay súper (92) en zonas rurales, ¿puede rechazarse la oferta? Justifique con la LOSNCP."
       ],
       solucion: "Solución técnica:\n1. La SUV turbo compensa la altitud, manteniendo su potencia casi constante. La pickup diésel aspirada pierde ≈25% de potencia, quedando con bajo torque a altas rpm, inadecuada para arranques en pendiente. El turbo también mejora la mezcla estequiométrica. Emisiones: la SUV con catalizador y sonda lambda funciona correctamente; la diésel aspirada generará humo negro por falta de oxígeno.\n2. Deben cumplir NTE INEN 034 (vidrios), 1669 (cinturones), 2207 (emisiones), y la RTE INEN 011 (homologación vehicular). En recepción se exige certificado de conformidad y se realizan ensayos de emisiones con analizador de gases en el taller institucional.\n3. Sí, se puede rechazar porque la operatividad real exige combustible disponible. La LOSNCP art. 62 (oferta inconveniente) y art. 64.2 (incumplimiento de requisitos implícitos). Se debe adjuntar evidencia de las estaciones de servicio de la zona y la ficha técnica del motor."
-    },
-    'Medicina': {
-      enunciado: "Un detenido en un calabozo de la Policía Nacional es encontrado muerto por el guardia durante la ronda matinal. El cuerpo yace boca arriba en el suelo de la celda, cerca de la litera. El médico de turno debe realizar el levantamiento del cadáver y la valoración inicial. La escena incluye un colchón parcialmente quemado y un frasco vacío de solvente. Se sospecha intoxicación por inhalación. Se requiere precisar la causa y manera de muerte, así como la cadena de custodia de las evidencias.",
-      preguntas: [
-        "1. ¿Cuáles son los signos posmortem que esperaría encontrar y cómo estimaría el intervalo de muerte?",
-        "2. Describa el procedimiento médico-legal para la toma de muestras toxicológicas y la preservación de la cadena de custodia en este caso.",
-        "3. ¿Qué consideraciones éticas y legales rigen la actuación del médico al evaluar a un detenido fallecido bajo custodia policial?"
-      ],
-      solucion: "Solución técnica:\n1. Signos posmortem: lividez en declive (hipostasis) compatible con posición supina, rigidez en instauración o plena según el tiempo, enfriamiento cadavérico (algor mortis) y posible mancha verde abdominal. El intervalo puede estimarse mediante el nomograma de Henssge y la evolución de la rigidez. La presencia de un solvente sugiere muerte por asfixia química; hallazgos de autopsia podrían mostrar congestión pulmonar y olor característico en vísceras.\n2. Toma de muestras: sangre periférica (femoral), orina, humor vítreo y contenido gástrico; todas deben rotularse con fecha, hora, nombre del fallecido y firma del médico. La cadena de custodia exige embalaje sellado, acta de entrega a cada custodio y registro minucioso hasta el laboratorio del Servicio Nacional de Medicina Legal.\n3. Consideraciones éticas y legales: el médico actúa como perito, con deber de objetividad e imparcialidad (Art. 454 COIP). Debe abstenerse de emitir juicios de valor sobre la custodia, pero informar cualquier lesión sospechosa. La historia clínica pericial es documento público y debe reflejar fielmente los hallazgos. Se deben respetar los derechos del fallecido y de sus familiares, garantizando la cadena de custodia para evitar nulidades procesales."
     }
+  };
+
+  // Caso de muestra público (basado en Ingeniería Civil)
+  const SAMPLE_CASE = {
+    enunciado: "Ejemplo de caso práctico (Ingeniería Civil): Diseño de un puente peatonal metálico para conectar dos cuarteles policiales separados por una quebrada en la provincia de Napo. El puente debe soportar una carga de 500 kg/m² y resistir vientos de 120 km/h.",
+    preguntas: [
+      "1. ¿Qué tipo de estructura metálica recomendaría (cercha, viga armada, etc.) y por qué?",
+      "2. Detalle los ensayos no destructivos para verificar la calidad de las soldaduras.",
+      "3. ¿Qué artículos de la LOSNCP se aplican para la contratación de la fabricación e instalación?"
+    ],
+    solucion: "Respuesta técnica resumida:\n1. Se recomienda una cercha tipo Pratt o Warren por su eficiencia estructural y facilidad de montaje en zonas de difícil acceso. Las cerchas distribuyen mejor las cargas y permiten luces largas.\n2. Ensayos: líquidos penetrantes para detectar grietas superficiales, ultrasonido para verificar penetración y continuidad de soldadura, y partículas magnéticas en zonas críticas.\n3. LOSNCP: artículos 60 (evaluación técnica), 63 (subasta inversa si aplica), y el Reglamento de fiscalización de obras públicas. Se debe exigir garantía de fiel cumplimiento y certificado de soldadores calificados."
   };
 
   // ==================== ESTADO GLOBAL ====================
@@ -492,7 +487,7 @@
       currentUser = found;
       showMainPanel();
     } else {
-      errorDiv.textContent = 'Cédula o carrera no autorizada.';
+      errorDiv.textContent = 'Cédula o carrera no autorizada. Para prueba use: 1711111111 (Civil), 1712222222 (Industrial), 1710280942 (Mecánica), 1713333333 (Automotriz).';
     }
   }
 
@@ -544,30 +539,24 @@
     document.getElementById('caseLoading').style.display = 'block';
     try {
       const temas = TEMARIOS[currentUser.carrera];
-      if (!temas || temas.length === 0) {
-        throw new Error('No hay temario disponible para esta carrera.');
-      }
+      if (!temas || temas.length === 0) throw new Error('No hay temario para esta carrera.');
       const indiceAleatorio = Math.floor(Math.random() * temas.length);
       const temaSeleccionado = temas[indiceAleatorio];
-      console.log(`Tema seleccionado aleatoriamente (#${indiceAleatorio + 1}): ${temaSeleccionado}`);
 
-      const prompt = `Eres un experto evaluador de la Policía Nacional del Ecuador. Genera un caso práctico para un especialista en ${currentUser.carrera}. El caso debe centrarse EXCLUSIVAMENTE en el siguiente tema del temario:\n\n"${temaSeleccionado}"\n\nCombina la especialidad con doctrina policial, administración pública ecuatoriana (LOSNCP) y pensamiento crítico. Proporciona un contexto operacional realista, 3 preguntas técnicas y la respuesta técnica detallada. La respuesta técnica debe ser detallada pero no exceder las 500 palabras. Devuelve la respuesta en formato JSON con exactamente los siguientes campos: "enunciado" (texto), "preguntas" (array de strings) y "solucion" (texto). No incluyas explicaciones adicionales. Solo el JSON.`;
-
+      const prompt = `Eres un experto evaluador de la Policía Nacional del Ecuador. Genera un caso práctico para un especialista en ${currentUser.carrera}. El caso debe centrarse EXCLUSIVAMENTE en el siguiente tema del temario:\n\n"${temaSeleccionado}"\n\nCombina la especialidad con doctrina policial, administración pública ecuatoriana (LOSNCP) y pensamiento crítico. Proporciona un contexto operacional realista, 3 preguntas técnicas y la respuesta técnica detallada (máx. 500 palabras). Devuelve JSON con: "enunciado", "preguntas" (array), "solucion". Solo JSON.`;
       const response = await callDeepSeek([
-        { role: 'system', content: 'Eres un generador de casos prácticos. Responde SOLO con un objeto JSON válido, sin markdown alrededor.' },
+        { role: 'system', content: 'Responde SOLO con un objeto JSON válido, sin texto adicional.' },
         { role: 'user', content: prompt }
       ], 0.5, 20000);
 
       let jsonStr = response.trim();
       const fenceMatch = jsonStr.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
-      if (fenceMatch) { jsonStr = fenceMatch[1].trim(); }
+      if (fenceMatch) jsonStr = fenceMatch[1].trim();
       const firstBrace = jsonStr.indexOf('{');
-      if (firstBrace > 0) { jsonStr = jsonStr.substring(firstBrace); }
+      if (firstBrace > 0) jsonStr = jsonStr.substring(firstBrace);
 
       function sanitizeJSON(str) {
-        let result = '';
-        let inString = false;
-        let escaped = false;
+        let result = '', inString = false, escaped = false;
         for (let i = 0; i < str.length; i++) {
           const c = str[i];
           if (escaped) { result += c; escaped = false; continue; }
@@ -578,7 +567,7 @@
             else if (c === '\r') result += '\\r';
             else if (c === '\t') result += '\\t';
             else result += '\\u' + ('000' + c.charCodeAt(0).toString(16)).slice(-4);
-          } else { result += c; }
+          } else result += c;
         }
         return result;
       }
@@ -587,9 +576,7 @@
       if (caseData.enunciado && caseData.preguntas && caseData.solucion) {
         currentCase = caseData;
         displayCase(caseData);
-      } else {
-        throw new Error('El JSON no contiene los campos requeridos.');
-      }
+      } else throw new Error('JSON inválido');
     } catch (e) {
       console.error(e);
       document.getElementById('caseContent').innerHTML = `<p>Error al generar caso con IA. ${e.message}</p>`;
@@ -602,9 +589,8 @@
   // ==================== RESPUESTA MODELO Y EVALUACIÓN ====================
   function showModelAnswer() {
     if (!currentCase) { alert('Primero debe crear un caso práctico.'); return; }
-    const box = document.getElementById('modelAnswerBox');
     document.getElementById('modelAnswerContent').innerHTML = `<pre>${currentCase.solucion}</pre>`;
-    box.style.display = 'block';
+    document.getElementById('modelAnswerBox').style.display = 'block';
     document.getElementById('feedbackBox').style.display = 'none';
     modelAnswerVisible = true;
   }
@@ -618,29 +604,54 @@
     document.getElementById('feedbackLoading').style.display = 'block';
     document.getElementById('feedbackBox').style.display = 'none';
     try {
-      const prompt = `Eres un instructor experto de la Policía Nacional del Ecuador. Evalúa la respuesta del aspirante a especialista en ${currentUser.carrera}.\n\nCaso práctico:\n${currentCase.enunciado}\n\nPreguntas:\n${currentCase.preguntas.join('\n')}\n\nRespuesta modelo:\n${currentCase.solucion}\n\nRespuesta del aspirante:\n${userText}\n\nSeñala aciertos y errores concretos con tono constructivo, no condescendiente. Al final sugiere qué temas del temario repasar. Máximo 500 palabras.`;
+      const prompt = `Eres un instructor experto de la Policía Nacional. Evalúa la respuesta del aspirante a especialista en ${currentUser.carrera}.\n\nCaso:\n${currentCase.enunciado}\n\nPreguntas:\n${currentCase.preguntas.join('\n')}\n\nRespuesta modelo:\n${currentCase.solucion}\n\nRespuesta del aspirante:\n${userText}\n\nSeñala aciertos y errores concretos, tono constructivo. Sugiere temas a repasar. Máx 500 palabras.`;
       const feedback = await callDeepSeek([
-        { role: 'system', content: 'Eres un instructor evaluador. Responde con texto claro y constructivo.' },
+        { role: 'system', content: 'Eres un instructor evaluador. Responde texto claro.' },
         { role: 'user', content: prompt }
       ], 0.7, 3000);
       document.getElementById('feedbackContent').innerHTML = `<pre style="white-space: pre-wrap;">${feedback}</pre>`;
       document.getElementById('feedbackBox').style.display = 'block';
     } catch (e) {
-      document.getElementById('feedbackContent').innerHTML = `<p style="color:red;">Error al obtener evaluación: ${e.message}</p>`;
+      document.getElementById('feedbackContent').innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
       document.getElementById('feedbackBox').style.display = 'block';
     } finally {
       document.getElementById('feedbackLoading').style.display = 'none';
     }
   }
 
-  // ==================== API DEEPSEEK ====================
+  // ==================== CASO DE MUESTRA (SIN LOGIN) ====================
+  function showSampleCase() {
+    const modal = document.getElementById('sampleModal');
+    const contentDiv = document.getElementById('sampleCaseContent');
+    contentDiv.innerHTML = `
+      <p><strong>📌 Contexto (Ingeniería Civil - caso demostrativo):</strong></p>
+      <p>${SAMPLE_CASE.enunciado}</p>
+      <p><strong>❓ Preguntas técnicas:</strong></p>
+      <ol><li>${SAMPLE_CASE.preguntas.join('</li><li>')}</li></ol>
+      <p><strong>✅ Respuesta técnica modelo:</strong></p>
+      <pre style="white-space:pre-wrap;">${SAMPLE_CASE.solucion}</pre>
+      <p style="margin-top:1rem; font-size:0.85rem; color:#00695c;">*Este es un ejemplo de la calidad de los casos y la retroalimentación que recibirá al iniciar sesión.*</p>
+    `;
+    modal.style.display = 'flex';
+  }
+
+  function closeSampleModal() {
+    document.getElementById('sampleModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById('sampleModal');
+    if (event.target === modal) modal.style.display = 'none';
+  };
+
+  // ==================== LLAMADA A DEEPSEEK ====================
   async function callDeepSeek(messages, temperature = 0.7, maxTokens = 2000) {
     const resp = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEY}` },
       body: JSON.stringify({ model: MODEL, messages: messages, temperature: temperature, max_tokens: maxTokens })
     });
-    if (!resp.ok) { const errBody = await resp.text(); throw new Error(`API error ${resp.status}: ${errBody}`); }
+    if (!resp.ok) throw new Error(`API error ${resp.status}: ${await resp.text()}`);
     const data = await resp.json();
     return data.choices[0].message.content;
   }

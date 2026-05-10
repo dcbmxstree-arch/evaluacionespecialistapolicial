@@ -35,7 +35,7 @@
     .error-msg { color: #c62828; margin-top: 0.5rem; font-weight: bold; }
     .footer-note { margin-top: 1.8rem; font-size: 0.7rem; color: #aaa; text-align: center; border-top: 1px solid #eee; padding-top: 1rem; }
 
-    /* Panel principal (sin cambios estructurales) */
+    /* Panel principal */
     .main-panel { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
     .header h2 { color: #004d40; }
@@ -48,7 +48,7 @@
     textarea { width: 100%; height: 200px; padding: 0.8rem; border: 1px solid #ccc; border-radius: 0.5rem; resize: vertical; }
     .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
     .btn-group .btn { width: auto; }
-    pre { white-space: pre-wrap; background: #f5f5f5; padding: 1rem; border-radius: 0.5rem; }
+    pre { white-space: pre-wrap; background: #f5f5f5; padding: 1rem; border-radius: 0.5rem; font-family: 'Segoe UI', monospace; font-size: 0.9rem; }
     .loading { text-align: center; color: #004d40; margin: 1rem 0; }
 
     /* Modal para caso de muestra */
@@ -109,7 +109,7 @@
   </div>
 </div>
 
-<!-- PANEL PRINCIPAL (idéntico funcionamiento, solo cambian los datos) -->
+<!-- PANEL PRINCIPAL -->
 <div id="mainPanel" class="main-panel">
   <div class="header">
     <h2>Panel del Aspirante – <span id="careerDisplay"></span></h2>
@@ -161,12 +161,12 @@
 </a>
 
 <script>
-  // ==================== CONFIGURACIÓN API (sin cambios) ====================
+  // ==================== CONFIGURACIÓN API ====================
   const API_KEY = 'sk-5be59b1373ae48dfb7a39e9b2e5b5a46';
   const API_URL = 'https://api.deepseek.com/v1/chat/completions';
   const MODEL = 'deepseek-chat';
 
-  // ==================== USUARIOS AUTORIZADOS (solo ingenierías) ====================
+  // ==================== USUARIOS AUTORIZADOS ====================
   const ALLOWED_USERS = [
     { cedula: '1711111111', carrera: 'Ingeniería Civil' },
     { cedula: '1712222222', carrera: 'Ingeniería Industrial' },
@@ -174,7 +174,7 @@
     { cedula: '1713333333', carrera: 'Ingeniería Automotriz' }
   ];
 
-  // ==================== TEMARIOS COMPLETOS (se mantienen los originales para cada ingeniería) ====================
+  // ==================== TEMARIOS COMPLETOS (50 temas cada uno) ====================
   const TEMARIOS = {
     'Ingeniería Civil': [
       "1. Mecánica de suelos y cimentaciones en obras policiales (cuarteles, muros perimetrales).",
@@ -205,7 +205,7 @@
       "26. Diseño de canchas y pistas de reacción con requisitos de impacto.",
       "27. Instalaciones hidrosanitarias en destacamentos rurales sin red pública.",
       "28. Normativa de prevención de incendios en edificios policiales (NEC-HS).",
-      "29. Pathología del acero de refuerzo por corrosión en clima tropical.",
+      "29. Patología del acero de refuerzo por corrosión en clima tropical.",
       "30. Replanteo topográfico para instalación de antenas de comunicación.",
       "31. Diseño de depósitos para combustibles y almacenamiento de explosivos.",
       "32. Cálculo de estructuras temporales para operativos de control en carreteras.",
@@ -386,55 +386,54 @@
     ]
   };
 
-  // ==================== CASOS PRECARGADOS (sin Medicina) ====================
+  // ==================== CASOS PRECARGADOS CON DOCTRINA POLICIAL Y SIN ALUCINACIONES ====================
   const CASOS_BANK = {
     'Ingeniería Civil': {
       enunciado: "Usted es ingeniero civil especialista de la Dirección Nacional de Logística. Se debe construir un cuartel tipo en la provincia de Morona Santiago (zona de alta sismicidad y fuertes lluvias). El terreno presenta un suelo limo-arcilloso con capacidad portante de 0.8 kg/cm². El proyecto incluye un polvorín subterráneo y una torre de vigilancia de 15 m. Se cuenta con un presupuesto ajustado y se deben respetar las normas NEC y LOSNCP. Se reciben dos ofertas: una con cimentación superficial mejorada y otra con pilotes.",
       preguntas: [
         "1. Evalúe ambas soluciones de cimentación considerando la sismicidad, el tipo de suelo y el costo.",
         "2. Detalle las verificaciones estructurales necesarias para la torre de vigilancia bajo cargas de viento y sismo.",
-        "3. ¿Qué artículos de la LOSNCP aplicaría para la adjudicación y fiscalización de esta obra, garantizando transparencia?"
+        "3. ¿Qué aspectos de la LOSNCP aplicaría para la adjudicación y fiscalización de esta obra, garantizando transparencia? (Cite solo principios generales o consulte la ley vigente, evite números de artículo inventados)."
       ],
-      solucion: "Solución técnica:\n1. La cimentación superficial mejorada con compactación dinámica y geotextil podría ser suficiente si se aumenta la profundidad y se emplea una losa rigidizadora. Sin embargo, el suelo limo-arcilloso saturado puede licuarse durante un sismo. La opción de pilotes hincados hasta estrato firme es más segura sísmica pero más costosa. Dado el presupuesto limitado, se recomienda la cimentación superficial con mejoramiento del terreno y una superestructura liviana, siempre que el estudio de sitio descarte licuación. Se debe cumplir la NEC-SE-CM y DS.\n2. Torre de 15 m: análisis espectral sísmico según NEC-SE-DS, considerando factor de importancia para instalaciones esenciales. Cargas de viento según NEC-SE-VIVIENTO para la zona. Verificar desplazamiento lateral, estabilidad global y fatiga en anclajes.\n3. LOSNCP: artículos 60 (evaluación de ofertas) y 64 (rechazo) si una oferta no cumple técnico. Art. 69 para fiscalización y cumplimiento del contrato. Se debe nombrar un administrador de contrato y elaborar informes periciales para cada desembolso."
+      solucion: "Solución técnica:\n1. La cimentación superficial mejorada con compactación dinámica y geotextil podría ser suficiente si se aumenta la profundidad y se emplea una losa rigidizadora. Sin embargo, el suelo limo-arcilloso saturado puede licuarse durante un sismo. La opción de pilotes hincados hasta estrato firme es más segura sísmica pero más costosa. Dado el presupuesto limitado, se recomienda la cimentación superficial con mejoramiento del terreno y una superestructura liviana, siempre que el estudio de sitio descarte licuación. Se debe cumplir la NEC-SE-CM y DS.\n2. Torre de 15 m: análisis espectral sísmico según NEC-SE-DS, considerando factor de importancia para instalaciones esenciales. Cargas de viento según NEC-SE-VIVIENTO para la zona. Verificar desplazamiento lateral, estabilidad global y fatiga en anclajes.\n3. Se deben aplicar los principios de transparencia, eficiencia y legalidad de la LOSNCP. El procedimiento dependerá del presupuesto (ínfima cuantía, menor cuantía o licitación). Para la fiscalización se designa un administrador de contrato y se realizan informes periódicos. Se recomienda consultar la normativa secundaria del SERCOP vigente."
     },
     'Ingeniería Industrial': {
       enunciado: "La Policía Nacional adquirirá 5000 uniformes tácticos. Usted, como ingeniero industrial, debe diseñar el proceso de recepción, control de calidad y distribución a 30 comandos provinciales. El proveedor ha presentado un lote piloto con defectos en costuras. La normativa aplicable es ISO 2859 e INEN. También se debe optimizar el gasto público bajo la LOSNCP.",
       preguntas: [
         "1. ¿Qué plan de muestreo aplicaría para inspeccionar los uniformes? ¿Bajo qué NCA?",
         "2. Si el lote piloto presenta 12% de defectuosos, ¿cómo procedería según la norma y cómo evitaría corrupción?",
-        "3. Proponga un sistema de distribución logística que minimice el tiempo de entrega y los costos, considerando la geografía ecuatoriana."
+        "3. Proponga un sistema de distribución logística que minimice el tiempo de entrega y los costos, considerando la geografía ecuatoriana e integrando la doctrina de autogestión policial."
       ],
-      solucion: "Solución técnica:\n1. Se emplearía un plan de muestreo simple según ISO 2859-1, NCA de 2.5% para un nivel de inspección general II. Tamaño de lote: 5000 unidades, código letra L, tamaño de muestra 200, número de aceptación 10, rechazo 11.\n2. Con un 12% de defectuosos (24 en muestra de 200) se rechaza el lote. Se notifica al proveedor y se activa la cláusula de garantía. Para prevenir corrupción, se aplica el principio de transparencia de la LOSNCP, se conforma una comisión de recepción con veedor ciudadano y se documentan todos los hallazgos con fotografía y actas.\n3. Distribución: se usará un centro de consolidación en Quito y dos hubs regionales (Guayaquil y Cuenca). Envíos semanales consolidados por ruta, optimizando carga. Para zonas fronterizas, se emplearán empresas de transporte locales con seguimiento GPS. El modelo de costo mínimo se basa en programación lineal de transporte."
+      solucion: "Solución técnica:\n1. Se emplearía un plan de muestreo simple según ISO 2859-1, NCA de 2.5% para un nivel de inspección general II. Tamaño de lote: 5000 unidades, código letra L, tamaño de muestra 200, número de aceptación 10, rechazo 11.\n2. Con un 12% de defectuosos (24 en muestra de 200) se rechaza el lote. Se notifica al proveedor y se activa la cláusula de garantía. Para prevenir corrupción, se aplica el principio de transparencia de la LOSNCP, se conforma una comisión de recepción con veedor ciudadano y se documentan todos los hallazgos con fotografía y actas.\n3. Distribución: centro de consolidación en Quito y hubs regionales (Guayaquil y Cuenca). Envíos semanales optimizando carga. Para zonas fronterizas, se utiliza transporte local con seguimiento GPS. Se capacita al personal policial en la recepción y almacenamiento (autogestión), y se instalan cerraduras y registros de inventario para seguridad operativa."
     },
     'Ingeniería Mecánica': {
-      enunciado: "La Dirección de Logística requiere 45 camionetas 4x4 para patrullaje en Morona Santiago, Chimborazo y Esmeraldas (altura hasta 3800 m, diésel alto azufre >500 ppm). Dos ofertas: A con motor diésel common-rail ≤50 ppm, B con motor gasolina aspirado. Aplicar conocimientos de motores, LOSNCP y doctrina.",
+      enunciado: "La Dirección de Logística requiere 45 camionetas 4x4 para patrullaje en Morona Santiago, Chimborazo y Esmeraldas (altura hasta 3800 m, diésel alto azufre >500 ppm). Dos ofertas: A con motor diésel common-rail ≤50 ppm, B con motor gasolina aspirado. Aplicar conocimientos de motores, LOSNCP y doctrina policial de seguridad operativa.",
       preguntas: [
         "1. Analice el efecto de la altura en ambos motores y la influencia del combustible en la vida útil.",
-        "2. ¿Se puede rechazar la oferta A por falta de diésel adecuado? Fundamente con la LOSNCP.",
-        "3. Calcule conceptualmente el costo total de propiedad a 5 años e indique cuál conviene al interés público."
+        "2. ¿Se puede rechazar la oferta A por falta de diésel adecuado? Fundamente con principios de la LOSNCP.",
+        "3. Calcule conceptualmente el costo total de propiedad a 5 años e indique cuál conviene al interés público, integrando la doctrina de disponibilidad operativa."
       ],
-      solucion: "Solución técnica:\n1. Altura: densidad del aire cae un 65% a 3800 m. Motor aspirado (B) pierde ≈30 HP, queda con torque escaso para pendientes. Motor turbo (A) compensa parcialmente y mantiene 350 Nm a bajas rpm, ideal para terreno andino. Combustible: diésel alto azufre (>500 ppm) en sistema common-rail forma ácidos que corroen inyectores y reducen su vida hasta un 80% (ISO 12156). No habiendo diésel ≤50 ppm en las zonas, el motor A es inutilizable. Gasolina súper está disponible nacionalmente.\n2. Rechazo: LOSNCP art. 62 permite declarar oferta inconveniente si no se ajusta a la realidad operativa. Además el art. 64.2 faculta rechazar ofertas que no cumplan requisitos mínimos; la disponibilidad del combustible es un requisito implícito. Se debe documentar con mapa de estaciones de servicio y norma INEN 1489.\n3. TCO: A: menor adquisición y consumo, pero costos de mantenimiento y paro muy altos por fallos de inyección, disponibilidad <80%. B: mayor compra y consumo, pero bajo mantenimiento y alta disponibilidad. Costo de paro diario ≈$300. A 5 años, B es mucho más económica para el Estado y alinea con la doctrina de disponibilidad operativa."
+      solucion: "Solución técnica:\n1. Altura: densidad del aire cae un 65% a 3800 m. Motor aspirado (B) pierde ≈30 HP, queda con torque escaso. Motor turbo (A) compensa parcialmente. Combustible: diésel alto azufre en common-rail forma ácidos que corroen inyectores. Sin diésel de calidad en zonas, el motor A es inviable. Gasolina sí está disponible.\n2. Se puede rechazar la oferta A porque no se ajusta a la realidad operativa (falta de combustible compatible), aplicando el principio de conveniencia y oportunidad de la LOSNCP. Se debe documentar con mapa de estaciones de servicio y análisis de disponibilidad.\n3. TCO: A menor adquisición pero altos costos de reparación y paro (disponibilidad <80%). B mayor compra pero bajo mantenimiento y alta disponibilidad. El costo de paro diario estimado justifica elegir B, alineado con la doctrina de seguridad operativa que exige vehículos siempre listos."
     },
     'Ingeniería Automotriz': {
       enunciado: "Se va a adquirir 20 patrulleros para la sierra centro (altitud 2800-3500 m). Se presentan dos opciones: una SUV con motor turbo gasolina 2.0L y otra pickup diésel 2.8L aspirada. Evalúe desempeño, emisiones y mantenimiento. Además, la LOSNCP y normativa INEN automotriz.",
       preguntas: [
         "1. Compare el comportamiento de ambos motores en altura, considerando la relación estequiométrica y la potencia disponible.",
-        "2. ¿Qué normas INEN debe cumplir el vehículo y cómo verificaría su conformidad en la recepción?",
+        "2. ¿Qué normas INEN debe cumplir el vehículo y cómo verificaría su conformidad en la recepción? (Indique cómo consultar la normativa, evite números falsos).",
         "3. Si la SUV turbo requiere gasolina de 98 octanos y solo hay súper (92) en zonas rurales, ¿puede rechazarse la oferta? Justifique con la LOSNCP."
       ],
-      solucion: "Solución técnica:\n1. La SUV turbo compensa la altitud, manteniendo su potencia casi constante. La pickup diésel aspirada pierde ≈25% de potencia, quedando con bajo torque a altas rpm, inadecuada para arranques en pendiente. El turbo también mejora la mezcla estequiométrica. Emisiones: la SUV con catalizador y sonda lambda funciona correctamente; la diésel aspirada generará humo negro por falta de oxígeno.\n2. Deben cumplir NTE INEN 034 (vidrios), 1669 (cinturones), 2207 (emisiones), y la RTE INEN 011 (homologación vehicular). En recepción se exige certificado de conformidad y se realizan ensayos de emisiones con analizador de gases en el taller institucional.\n3. Sí, se puede rechazar porque la operatividad real exige combustible disponible. La LOSNCP art. 62 (oferta inconveniente) y art. 64.2 (incumplimiento de requisitos implícitos). Se debe adjuntar evidencia de las estaciones de servicio de la zona y la ficha técnica del motor."
+      solucion: "Solución técnica:\n1. La SUV turbo compensa la altitud, manteniendo potencia. La pickup diésel aspirada pierde ~25% de potencia, inadecuada para pendientes. El turbo mejora la mezcla estequiométrica. Emisiones: la diésel generará humo negro por falta de oxígeno.\n2. Los vehículos deben cumplir las normas INEN aplicables a seguridad y emisiones (por ejemplo, NTE INEN 2207 para emisiones). En recepción se exige el certificado de conformidad y se realizan ensayos de emisiones con analizador de gases en el taller institucional. Para conocer el listado completo, se debe consultar el catálogo actualizado del INEN.\n3. Sí, porque la operatividad real exige combustible disponible. Según el principio de eficiencia de la LOSNCP, una oferta que requiera un combustible no disponible en la zona de operación es inconveniente. Se debe adjuntar evidencia de las estaciones de servicio y la ficha técnica."
     }
   };
 
-  // Caso de muestra público (basado en Ingeniería Civil)
   const SAMPLE_CASE = {
     enunciado: "Ejemplo de caso práctico (Ingeniería Civil): Diseño de un puente peatonal metálico para conectar dos cuarteles policiales separados por una quebrada en la provincia de Napo. El puente debe soportar una carga de 500 kg/m² y resistir vientos de 120 km/h.",
     preguntas: [
       "1. ¿Qué tipo de estructura metálica recomendaría (cercha, viga armada, etc.) y por qué?",
       "2. Detalle los ensayos no destructivos para verificar la calidad de las soldaduras.",
-      "3. ¿Qué artículos de la LOSNCP se aplican para la contratación de la fabricación e instalación?"
+      "3. ¿Qué aspectos de la LOSNCP se aplican para la contratación de la fabricación e instalación? (Indique principios y procedimientos, evite números falsos)."
     ],
-    solucion: "Respuesta técnica resumida:\n1. Se recomienda una cercha tipo Pratt o Warren por su eficiencia estructural y facilidad de montaje en zonas de difícil acceso. Las cerchas distribuyen mejor las cargas y permiten luces largas.\n2. Ensayos: líquidos penetrantes para detectar grietas superficiales, ultrasonido para verificar penetración y continuidad de soldadura, y partículas magnéticas en zonas críticas.\n3. LOSNCP: artículos 60 (evaluación técnica), 63 (subasta inversa si aplica), y el Reglamento de fiscalización de obras públicas. Se debe exigir garantía de fiel cumplimiento y certificado de soldadores calificados."
+    solucion: "Respuesta técnica resumida:\n1. Se recomienda una cercha tipo Pratt o Warren por su eficiencia estructural y facilidad de montaje en zonas de difícil acceso. Las cerchas distribuyen mejor las cargas y permiten luces largas.\n2. Ensayos: líquidos penetrantes para grietas superficiales, ultrasonido para verificar penetración de soldadura, y partículas magnéticas en zonas críticas. Estos métodos se rigen por normas ISO o ASTM que deben ser consultadas.\n3. Se deben aplicar los principios de transparencia, eficiencia y legalidad de la LOSNCP. El procedimiento dependerá del presupuesto (ínfima cuantía, menor cuantía o licitación). Se recomienda consultar la normativa secundaria del SERCOP vigente para el caso concreto."
   };
 
   // ==================== ESTADO GLOBAL ====================
@@ -470,33 +469,19 @@
     document.getElementById('feedbackBox').style.display = 'none';
   }
 
-  // ==================== AUTENTICACIÓN ====================
   function login() {
     const cedula = document.getElementById('cedulaInput').value.trim();
     const carrera = document.getElementById('carreraSelect').value;
     const errorDiv = document.getElementById('loginError');
     errorDiv.textContent = '';
-
-    if (!cedula || !carrera) {
-      errorDiv.textContent = 'Complete todos los campos.';
-      return;
-    }
-
+    if (!cedula || !carrera) { errorDiv.textContent = 'Complete todos los campos.'; return; }
     const found = ALLOWED_USERS.find(u => u.cedula === cedula && u.carrera === carrera);
-    if (found) {
-      currentUser = found;
-      showMainPanel();
-    } else {
-      errorDiv.textContent = 'Cédula o carrera no autorizada. Para prueba use: 1711111111 (Civil), 1712222222 (Industrial), 1710280942 (Mecánica), 1713333333 (Automotriz).';
-    }
+    if (found) { currentUser = found; showMainPanel(); } 
+    else { errorDiv.textContent = 'Cédula o carrera no autorizada. Use credenciales de prueba: 1711111111 (Civil), 1712222222 (Industrial), 1710280942 (Mecánica), 1713333333 (Automotriz).'; }
   }
 
-  function logout() {
-    currentUser = null;
-    showAccessScreen();
-  }
+  function logout() { currentUser = null; showAccessScreen(); }
 
-  // ==================== TEMARIO ====================
   function renderTemario(filter = '') {
     const container = document.getElementById('temarioContainer');
     if (!currentUser) return;
@@ -505,35 +490,32 @@
     container.innerHTML = filtered.map(t => `<div class="temario-item">${t}</div>`).join('');
   }
 
-  function filterTemas() {
-    const text = document.getElementById('searchTema').value;
-    renderTemario(text);
-  }
+  function filterTemas() { const text = document.getElementById('searchTema').value; renderTemario(text); }
 
-  // ==================== CASO PRÁCTICO ====================
   function loadCaseFromBank() {
     if (!currentUser) return;
     const bankCase = CASOS_BANK[currentUser.carrera];
-    if (!bankCase) {
-      document.getElementById('caseContent').innerHTML = 'No hay caso precargado para esta carrera. Use "Nuevo caso con IA".';
-      return;
-    }
+    if (!bankCase) { document.getElementById('caseContent').innerHTML = 'No hay caso precargado para esta carrera. Use "Nuevo caso con IA".'; return; }
     currentCase = bankCase;
     displayCase(bankCase);
   }
 
   function displayCase(caseObj) {
-    const html = `
-      <p><strong>Contexto operacional:</strong></p>
-      <p>${caseObj.enunciado}</p>
-      <p><strong>Preguntas:</strong></p>
-      <ol>${caseObj.preguntas.map(p => `<li>${p}</li>`).join('')}</ol>
-    `;
+    const html = `<p><strong>Contexto operacional:</strong></p><p>${caseObj.enunciado}</p><p><strong>Preguntas:</strong></p><ol>${caseObj.preguntas.map(p => `<li>${p}</li>`).join('')}</ol>`;
     document.getElementById('caseContent').innerHTML = html;
     document.getElementById('modelAnswerBox').style.display = 'none';
     document.getElementById('feedbackBox').style.display = 'none';
   }
 
+  function showModelAnswer() {
+    if (!currentCase) { alert('Primero debe crear un caso práctico.'); return; }
+    document.getElementById('modelAnswerContent').innerHTML = `<pre>${currentCase.solucion}</pre>`;
+    document.getElementById('modelAnswerBox').style.display = 'block';
+    document.getElementById('feedbackBox').style.display = 'none';
+    modelAnswerVisible = true;
+  }
+
+  // ==================== GENERACIÓN DE CASOS CON IA (ANTI-HALUCINACIONES) ====================
   async function generateCaseWithAI() {
     if (!currentUser) return;
     document.getElementById('caseLoading').style.display = 'block';
@@ -543,9 +525,19 @@
       const indiceAleatorio = Math.floor(Math.random() * temas.length);
       const temaSeleccionado = temas[indiceAleatorio];
 
-      const prompt = `Eres un experto evaluador de la Policía Nacional del Ecuador. Genera un caso práctico para un especialista en ${currentUser.carrera}. El caso debe centrarse EXCLUSIVAMENTE en el siguiente tema del temario:\n\n"${temaSeleccionado}"\n\nCombina la especialidad con doctrina policial, administración pública ecuatoriana (LOSNCP) y pensamiento crítico. Proporciona un contexto operacional realista, 3 preguntas técnicas y la respuesta técnica detallada (máx. 500 palabras). Devuelve JSON con: "enunciado", "preguntas" (array), "solucion". Solo JSON.`;
+      const prompt = `Eres un experto evaluador de la Policía Nacional del Ecuador. Genera un caso práctico para un especialista en ${currentUser.carrera}. El caso debe centrarse EXCLUSIVAMENTE en el siguiente tema del temario:\n\n"${temaSeleccionado}"\n\nCombina la especialidad con doctrina policial (autogestión, seguridad operativa) y administración pública ecuatoriana (LOSNCP, principios generales). 
+
+      IMPORTANTE: 
+      - NO inventes números de artículos de la LOSNCP, ni números de normas INEN, ni códigos específicos que no puedas verificar. 
+      - Si necesitas hacer referencia a una norma, indica cómo se aplicaría en la práctica, por ejemplo: "según la normativa INEN aplicable a sistemas de filtración (se debe consultar el catálogo actualizado del INEN)" o "de acuerdo con los principios de la LOSNCP (transparencia, eficiencia), se sugiere un procedimiento de menor cuantía." 
+      - No proporciones números de artículos a menos que estés absolutamente seguro de que existen y son correctos (si no, omítelos y describe la lógica). 
+      - Enfatiza la doctrina policial de autogestión y seguridad operativa en la operación y mantenimiento de la infraestructura o equipo. 
+      - Si no recuerdas un dato exacto, di que se debe consultar la fuente oficial.
+
+      Proporciona un contexto operacional realista, 3 preguntas técnicas y la respuesta técnica detallada (máx. 500 palabras). Devuelve JSON con: "enunciado", "preguntas" (array), "solucion". Solo JSON.`;
+
       const response = await callDeepSeek([
-        { role: 'system', content: 'Responde SOLO con un objeto JSON válido, sin texto adicional.' },
+        { role: 'system', content: 'Responde SOLO con un objeto JSON válido, sin texto adicional. No alucines números de leyes o normas. Si no sabes un número exacto, describe el procedimiento o di que debe consultarse la normativa vigente.' },
         { role: 'user', content: prompt }
       ], 0.5, 20000);
 
@@ -586,15 +578,7 @@
     }
   }
 
-  // ==================== RESPUESTA MODELO Y EVALUACIÓN ====================
-  function showModelAnswer() {
-    if (!currentCase) { alert('Primero debe crear un caso práctico.'); return; }
-    document.getElementById('modelAnswerContent').innerHTML = `<pre>${currentCase.solucion}</pre>`;
-    document.getElementById('modelAnswerBox').style.display = 'block';
-    document.getElementById('feedbackBox').style.display = 'none';
-    modelAnswerVisible = true;
-  }
-
+  // ==================== EVALUACIÓN DE RESPUESTA (ANTI-HALUCINACIONES) ====================
   async function reviewMyAnswer() {
     if (!currentCase) { alert('No hay caso práctico activo.'); return; }
     const userText = document.getElementById('userAnswer').value.trim();
@@ -604,9 +588,30 @@
     document.getElementById('feedbackLoading').style.display = 'block';
     document.getElementById('feedbackBox').style.display = 'none';
     try {
-      const prompt = `Eres un instructor experto de la Policía Nacional. Evalúa la respuesta del aspirante a especialista en ${currentUser.carrera}.\n\nCaso:\n${currentCase.enunciado}\n\nPreguntas:\n${currentCase.preguntas.join('\n')}\n\nRespuesta modelo:\n${currentCase.solucion}\n\nRespuesta del aspirante:\n${userText}\n\nSeñala aciertos y errores concretos, tono constructivo. Sugiere temas a repasar. Máx 500 palabras.`;
+      const prompt = `Eres un instructor experto de la Policía Nacional. Evalúa la respuesta del aspirante a especialista en ${currentUser.carrera}. 
+
+      Caso:
+      ${currentCase.enunciado}
+
+      Preguntas:
+      ${currentCase.preguntas.join('\n')}
+
+      Respuesta modelo (de referencia):
+      ${currentCase.solucion}
+
+      Respuesta del aspirante:
+      ${userText}
+
+      INSTRUCCIONES PARA LA EVALUACIÓN:
+      - Señala aciertos y errores concretos, con tono constructivo.
+      - Si el aspirante cita un número de artículo, norma INEN o código que no existe o no corresponde, indícalo claramente y sugiere no inventar referencias. 
+      - No inventes ni alucines tú tampoco números de leyes o normas. Si necesitas hacer referencia, usa frases como "de acuerdo con la LOSNCP vigente" o "la normativa técnica aplicable INEN para ...".
+      - Sugiere temas a repasar basados en el temario oficial.
+      - Incorpora la doctrina policial (autogestión, seguridad operativa) en la retroalimentación cuando sea relevante.
+      - Máximo 500 palabras.`;
+
       const feedback = await callDeepSeek([
-        { role: 'system', content: 'Eres un instructor evaluador. Responde texto claro.' },
+        { role: 'system', content: 'Eres un instructor evaluador. No alucines números de leyes, artículos o normas. Si no conoces un número exacto, describe el principio. Sé constructivo y didáctico.' },
         { role: 'user', content: prompt }
       ], 0.7, 3000);
       document.getElementById('feedbackContent').innerHTML = `<pre style="white-space: pre-wrap;">${feedback}</pre>`;
@@ -619,30 +624,15 @@
     }
   }
 
-  // ==================== CASO DE MUESTRA (SIN LOGIN) ====================
+  // ==================== CASO DE MUESTRA ====================
   function showSampleCase() {
     const modal = document.getElementById('sampleModal');
     const contentDiv = document.getElementById('sampleCaseContent');
-    contentDiv.innerHTML = `
-      <p><strong>📌 Contexto (Ingeniería Civil - caso demostrativo):</strong></p>
-      <p>${SAMPLE_CASE.enunciado}</p>
-      <p><strong>❓ Preguntas técnicas:</strong></p>
-      <ol><li>${SAMPLE_CASE.preguntas.join('</li><li>')}</li></ol>
-      <p><strong>✅ Respuesta técnica modelo:</strong></p>
-      <pre style="white-space:pre-wrap;">${SAMPLE_CASE.solucion}</pre>
-      <p style="margin-top:1rem; font-size:0.85rem; color:#00695c;">*Este es un ejemplo de la calidad de los casos y la retroalimentación que recibirá al iniciar sesión.*</p>
-    `;
+    contentDiv.innerHTML = `<p><strong>📌 Contexto (Ingeniería Civil - caso demostrativo):</strong></p><p>${SAMPLE_CASE.enunciado}</p><p><strong>❓ Preguntas técnicas:</strong></p><ol><li>${SAMPLE_CASE.preguntas.join('</li><li>')}</li></ol><p><strong>✅ Respuesta técnica modelo:</strong></p><pre>${SAMPLE_CASE.solucion}</pre><p style="margin-top:1rem;">*Este es un ejemplo de la calidad de los casos y la retroalimentación que recibirá al iniciar sesión.*</p>`;
     modal.style.display = 'flex';
   }
 
-  function closeSampleModal() {
-    document.getElementById('sampleModal').style.display = 'none';
-  }
-
-  window.onclick = function(event) {
-    const modal = document.getElementById('sampleModal');
-    if (event.target === modal) modal.style.display = 'none';
-  };
+  function closeSampleModal() { document.getElementById('sampleModal').style.display = 'none'; }
 
   // ==================== LLAMADA A DEEPSEEK ====================
   async function callDeepSeek(messages, temperature = 0.7, maxTokens = 2000) {
@@ -656,7 +646,8 @@
     return data.choices[0].message.content;
   }
 
-  // ==================== INICIO ====================
+  // ==================== EVENTOS GLOBALES ====================
+  window.onclick = function(event) { const modal = document.getElementById('sampleModal'); if (event.target === modal) modal.style.display = 'none'; };
   showAccessScreen();
 </script>
 </body>

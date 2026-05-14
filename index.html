@@ -515,7 +515,7 @@
     modelAnswerVisible = true;
   }
 
-  // ==================== GENERACIÓN DE CASOS CON IA (ANTI-HALUCINACIONES) ====================
+  // ==================== GENERACIÓN DE CASOS CON IA (ANTI-ALUCINACIONES) ====================
   async function generateCaseWithAI() {
     if (!currentUser) return;
     document.getElementById('caseLoading').style.display = 'block';
@@ -527,7 +527,8 @@
 
       const prompt = `Eres un experto evaluador de la Policía Nacional del Ecuador. Genera un caso práctico para un especialista en ${currentUser.carrera}. El caso debe centrarse EXCLUSIVAMENTE en el siguiente tema del temario:\n\n"${temaSeleccionado}"\n\nCombina la especialidad con doctrina policial (autogestión, seguridad operativa) y administración pública ecuatoriana (LOSNCP, principios generales). 
 
-      IMPORTANTE: 
+      IMPORTANTE:
+      - NO crees preguntas de contratacion publica, no menciones montos de dinero ni como adquirir bienes, debe ser un caso enfocado en conocimientos tecnicos de la mano con la doctrina policial
       - NO inventes números de artículos de la LOSNCP, ni números de normas INEN, ni códigos específicos que no puedas verificar. 
       - Si necesitas hacer referencia a una norma, indica cómo se aplicaría en la práctica, por ejemplo: "según la normativa INEN aplicable a sistemas de filtración (se debe consultar el catálogo actualizado del INEN)" o "de acuerdo con los principios de la LOSNCP (transparencia, eficiencia), se sugiere un procedimiento de menor cuantía." 
       - No proporciones números de artículos a menos que estés absolutamente seguro de que existen y son correctos (si no, omítelos y describe la lógica). 
